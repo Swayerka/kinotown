@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kinotown
-// @namespace    http://tampermonkey.net/
-// @version      0.14
+// @namespace    https://t.me/kinotown_bot
+// @version      0.15
 // @description  watch+
 // @author       kinotown
 // @match        https://www.kinopoisk.ru/*
