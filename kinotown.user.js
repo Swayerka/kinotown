@@ -7,8 +7,8 @@
 // @match        https://www.kinopoisk.ru/*
 // @icon         https://kinotown.bitbucket.io/favicon.ico
 // @grant        none
-// @downloadURL  https://github.com/HarlemShakespeare/YOUR_REPO_NAME/raw/master/YOUR_USERSCRIPT.user.js
-// @updateURL    https://raw.github.com/SthephanShinkufag/Dollchan-Extension-Tools/master/Dollchan_Extension_Tools.meta.js
+// @downloadURL  https://github.com/Swayerka/kinotown/raw/main/kinotown.user.js
+// @updateURL    https://github.com/Swayerka/kinotown/raw/main/kinotown.user.js
 // ==/UserScript==
 
 const playIco=`
