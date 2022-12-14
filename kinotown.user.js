@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kinotown
 // @namespace    https://t.me/kinotown_bot
-// @version      0.15
+// @version      0.16
 // @description  watch+
 // @author       kinotown
 // @match        https://www.kinopoisk.ru/*
@@ -24,7 +24,7 @@ window.addEventListener('load', function() {
     var btnWatch = document.createElement('div');
     btnWatch.style.scale=1
     btnWatch.onclick = openPlayer;
-    btnWatch.innerHTML=`<button style="font-weight: 500;cursor: wait;border: 2px solid #ffffff;height: 50px;width: 141px;border-radius: 20px;background-color: #f2f2f2; color: black;font-size: 24px;">${playIco} Watch</button>`
+    btnWatch.innerHTML=`<button style="font-weight: 500;cursor: pointer;border: 2px solid #ffffff;height: 50px;width: 141px;border-radius: 20px;background-color: #f2f2f2; color: black;font-size: 24px;">${playIco} Watch</button>`
     btnWatch.style.cssText = 'transition: scale 330ms ease-in-out;font-family: Graphik Kinopoisk LC Web,Tahoma,Arial,Verdana,sans-serif;';
     btnWatch.onmouseover = () => {btnWatch.style.scale=1.2};
     btnWatch.onmouseout = () => {btnWatch.style.scale=1};
