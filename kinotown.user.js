@@ -37,7 +37,7 @@ function openPlayer() {
     var url = window.location.href;
     var splitted = url.split('/');
     var fid = splitted[4];
-    var watchPage = `http://kinotown.bitbucket.io/?id=${fid}`;
+    var watchPage = `https://kinotown.bitbucket.io/betav2.html?id=${fid}`;
     var filmTab = window.open(watchPage, '_blank');
     filmTab.focus();
 }
