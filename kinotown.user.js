@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kinotown
 // @namespace    https://t.me/kinotown_bot
-// @version      0.16
+// @version      0.17
 // @description  watch+
 // @author       kinotown
 // @match        https://www.kinopoisk.ru/*
