@@ -1,43 +1,77 @@
 // ==UserScript==
 // @name         kinotown
 // @namespace    https://t.me/kinotown_bot
-// @version      0.17
-// @description  watch+
+// @version      0.18
+// @description  Add watch button on kinopoisk.ru website
 // @author       kinotown
-// @match        https://www.kinopoisk.ru/*
+// @match        *://www.kinopoisk.ru/*
 // @icon         https://kinotown.bitbucket.io/favicon.ico
 // @grant        none
 // @downloadURL  https://github.com/Swayerka/kinotown/raw/main/kinotown.user.js
 // @updateURL    https://github.com/Swayerka/kinotown/raw/main/kinotown.user.js
 // ==/UserScript==
 
-const playIco=`
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
-  <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
-</svg>
-`;
+const ktLogo=`data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2aWV3Qm94PSI1LjA
+yOCA0Ljk5NSA5NC45OTUgODkuNzQ0IiB3aWR0aD0iOTguMzM0IiBoZWlnaHQ9IjkzLjAwNSIgeG
+1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNIDMwLjY4IDIyL
+jA0IEMgMzQuMjU5IDE1Ljg0MyAzNy44MzggMTUuODQzIDQxLjQxNiAyMi4wNCBMIDUyLjE1IDQw
+LjYzMiBDIDU1LjcyOSA0Ni44MyA1My45NCA0OS45MjkgNDYuNzgzIDQ5LjkyOSBMIDI1LjMxMyA
+0OS45MjkgQyAxOC4xNTcgNDkuOTI5IDE2LjM2NyA0Ni44MyAxOS45NDYgNDAuNjMyIFoiIHN0eW
+xlPSJmaWxsLXJ1bGU6IG5vbnplcm87IHBhaW50LW9yZGVyOiBzdHJva2U7IHN0cm9rZTogcmdiK
+DI1NSwgMjU1LCAyNTUpOyBmaWxsOiBub25lOyBzdHJva2Utd2lkdGg6IDRweDsiIHRyYW5zZm9y
+bT0ibWF0cml4KDAuODY2MDIxLCAtMC41MDAwMDcsIDAuNTAwMDA3LCAwLjg2NjAyMSwgLTEyLjA
+wMDg3MywgMjIuNTM0MTE4KSIvPgogIDxwYXRoIGQ9Ik0gNjkuMTIyIDM4LjA0MiBDIDY5LjEyMi
+A1NS4xODkgNTUuMjIyIDY5LjA4OSAzOC4wNzUgNjkuMDg5IEMgMjAuOTI4IDY5LjA4OSA3LjAyO
+CA1NS4xODkgNy4wMjggMzguMDQyIEMgNy4wMjggMjAuODk1IDIwLjkyOCA2Ljk5NSAzOC4wNzUg
+Ni45OTUgQyA1NS4yMjIgNi45OTUgNjkuMTIyIDIwLjg5NSA2OS4xMjIgMzguMDQyIFoiIHN0eWx
+lPSJmaWxsOiBub25lOyBmaWxsLXJ1bGU6IG5vbnplcm87IHN0cm9rZTogcmdiKDI1NSwgMjU1LC
+AyNTUwKTsgc3Ryb2tlLXdpZHRoOiA0cHg7Ii8+CiAgPHBhdGggZD0iTSA2Mi42NTggNjUuNjg3I
+EwgODkuNzExIDkyLjczOSBMIDk4LjAyMyA4NC40MjggTCA3MS4zNDQgNTcuNzQ5IiBzdHlsZT0i
+ZmlsbDogbm9uZTsgc3Ryb2tlLWxpbmVjYXA6IHJvdW5kOyBzdHJva2UtbWl0ZXJsaW1pdDogNTA
+7IHN0cm9rZS1saW5lam9pbjogcm91bmQ7IHBhaW50LW9yZGVyOiBmaWxsOyBzdHJva2U6IHJnYi
+gyNTUsIDI1NSwgMjU1KTsgc3Ryb2tlLXdpZHRoOiA0cHg7Ii8+Cjwvc3ZnPg==`
 
-
-window.addEventListener('load', function() {
-
-    var elementBtn=document.querySelector("div[class^='styles_buttons_']")
-    var btnWatch = document.createElement('div');
-    btnWatch.style.scale=1
-    btnWatch.onclick = openPlayer;
-    btnWatch.innerHTML=`<button style="font-weight: 500;cursor: pointer;border: 2px solid #ffffff;height: 50px;width: 141px;border-radius: 20px;background-color: #f2f2f2; color: black;font-size: 24px;">${playIco} Watch</button>`
-    btnWatch.style.cssText = 'transition: scale 330ms ease-in-out;font-family: Graphik Kinopoisk LC Web,Tahoma,Arial,Verdana,sans-serif;';
-    btnWatch.onmouseover = () => {btnWatch.style.scale=1.2};
-    btnWatch.onmouseout = () => {btnWatch.style.scale=1};
-    elementBtn.firstChild.append(btnWatch)
-
-})
-
+const BTN_ID="kinotown-btn"
+const KP_TYPES=["film","series"]
+const WILDCARD="div[class^='styles_header__']"
+const KT_LINK="kinotown.bitbucket.io/betav2.html"
 
 function openPlayer() {
-    var url = window.location.href;
-    var splitted = url.split('/');
-    var fid = splitted[4];
-    var watchPage = `https://kinotown.bitbucket.io/betav2.html?id=${fid}`;
-    var filmTab = window.open(watchPage, '_blank');
-    filmTab.focus();
+    window.open(`https://${KT_LINK}?id=${window.location.href.split('/')[4]}`, '_blank').focus();
+}
+
+window.onload = (event) => {
+    const observer = new MutationObserver(() => checkState());
+    observer.observe(document, { subtree: true, childList: true });
+    checkState();
+}
+
+let lastUrl = ""
+function checkState(){
+	let url = window.location.href;
+
+	if (url === lastUrl) return;
+	lastUrl = url;
+
+	let ktBtn = document.getElementById(BTN_ID);
+	let kpId = window.location.href.split('/')[4];
+	let kpType = window.location.href.split('/')[3];
+
+	if (!kpId || !kpType || !KP_TYPES.includes(kpType)) {
+		if (ktBtn) ktBtn.remove();
+	} else {
+		if (!ktBtn) addBtn();
+	}
+}
+
+function addBtn(){
+    var elementToFind=document.querySelector(WILDCARD)
+    var btnWatch = document.createElement('div');
+    btnWatch.id=BTN_ID
+    btnWatch.style.cssText = 'margin-top:15px;font-family: Graphik Kinopoisk LC Web,Tahoma,Arial,Verdana,sans-serif;';
+    btnWatch.classList.add("style_button__LAvI6","style_buttonSize52__kH6Ph","style_buttonAccent__UkTcy","style_buttonLight__NGs0i","style_withIconLeft__xpAII");
+    btnWatch.innerHTML=`<img src="${ktLogo}" alt="" width="40" height="40" class="d-inline-block align-text-top"><a>Kinotown</a>`
+    btnWatch.onclick = () => {openPlayer()};
+    //elementToFind.firstChild.append(btnWatch)
+    elementToFind.appendChild(btnWatch)
 }
