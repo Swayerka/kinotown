@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kinotown
 // @namespace    https://t.me/kinotown_bot
-// @version      0.18
+// @version      0.19
 // @description  Add watch button on kinopoisk.ru website
 // @author       kinotown
 // @match        *://www.kinopoisk.ru/*
@@ -34,7 +34,7 @@ gyNTUsIDI1NSwgMjU1KTsgc3Ryb2tlLXdpZHRoOiA0cHg7Ii8+Cjwvc3ZnPg==`
 const BTN_ID="kinotown-btn"
 const KP_TYPES=["film","series"]
 const WILDCARD="div[class^='styles_header__']"
-const KT_LINK="kinotown.bitbucket.io/betav2.html"
+const KT_LINK="kinotown.bitbucket.io/"
 
 function openPlayer() {
     window.open(`https://${KT_LINK}?id=${window.location.href.split('/')[4]}`, '_blank').focus();
