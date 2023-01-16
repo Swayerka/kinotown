@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kinotown
 // @namespace    https://t.me/kinotown_bot
-// @version      0.19
+// @version      0.21
 // @description  Add watch button on kinopoisk.ru website
 // @author       kinotown
 // @match        *://www.kinopoisk.ru/*
@@ -69,9 +69,10 @@ function addBtn(){
     var btnWatch = document.createElement('div');
     btnWatch.id=BTN_ID
     btnWatch.style.cssText = 'margin-top:15px;font-family: Graphik Kinopoisk LC Web,Tahoma,Arial,Verdana,sans-serif;';
-    btnWatch.classList.add("style_button__LAvI6","style_buttonSize52__kH6Ph","style_buttonAccent__UkTcy","style_buttonLight__NGs0i","style_withIconLeft__xpAII");
+    btnWatch.className=document.querySelector("button[class^='style_button__']").className
     btnWatch.innerHTML=`<img src="${ktLogo}" alt="" width="40" height="40" class="d-inline-block align-text-top"><a>Kinotown</a>`
+    btnWatch.style.background="linear-gradient(135deg,#f50 69.91%,#d6bb00)"
+    btnWatch.style.padding="0 12px"
     btnWatch.onclick = () => {openPlayer()};
-    //elementToFind.firstChild.append(btnWatch)
     elementToFind.appendChild(btnWatch)
 }
