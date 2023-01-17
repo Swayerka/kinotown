@@ -68,7 +68,7 @@ function addBtn(){
     var elementToFind=document.querySelector(WILDCARD)
     var btnWatch = document.createElement('div');
     btnWatch.id=BTN_ID
-    btnWatch.style.cssText = 'margin-top:15px;font-family: Graphik Kinopoisk LC Web,Tahoma,Arial,Verdana,sans-serif;';
+    btnWatch.style.cssText = 'color:white;margin-top:15px;font-family: Graphik Kinopoisk LC Web,Tahoma,Arial,Verdana,sans-serif;';
     btnWatch.className=document.querySelector("button[class^='style_button__']").className
     btnWatch.innerHTML=`<img src="${ktLogo}" alt="" width="40" height="40" class="d-inline-block align-text-top"><a>Kinotown</a>`
     btnWatch.style.background="linear-gradient(135deg,#f50 69.91%,#d6bb00)"
