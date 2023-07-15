@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name         kinotown
+// @name         kinotown-dev
 // @namespace    https://t.me/kinotown_bot
-// @version      0.21
+// @version      0.22
 // @description  Add watch button on kinopoisk.ru website
 // @author       kinotown
-// @match        *://www.kinopoisk.ru/*
+// @match        https://www.kinopoisk.ru/*
+// @match        https://www.imdb.com/title/*
 // @icon         https://kinotown.bitbucket.io/favicon.ico
 // @grant        none
 // @downloadURL  https://github.com/Swayerka/kinotown/raw/main/kinotown.user.js
@@ -36,14 +37,21 @@ const KP_TYPES=["film","series"]
 const WILDCARD="div[class^='styles_header__']"
 const KT_LINK="kinotown.bitbucket.io/"
 
-function openPlayer() {
-    window.open(`https://${KT_LINK}?id=${window.location.href.split('/')[4]}`, '_blank').focus();
+function openPlayer(s) {
+    window.open(`https://${KT_LINK}?s=${s}&id=${window.location.href.split('/')[4]}`, '_blank').focus();
 }
 
 window.onload = (event) => {
-    const observer = new MutationObserver(() => checkState());
-    observer.observe(document, { subtree: true, childList: true });
-    checkState();
+    if(window.location.hostname=='www.imdb.com'){
+        adBtnimdb()
+    }else if(window.location.hostname=='www.kinopoisk.ru'){
+        const observer = new MutationObserver(() => checkState());
+        observer.observe(document, { subtree: true, childList: true });
+        checkState();
+    }else{
+        console.log("o")
+    }
+
 }
 
 let lastUrl = ""
@@ -68,11 +76,25 @@ function addBtn(){
     var elementToFind=document.querySelector(WILDCARD)
     var btnWatch = document.createElement('div');
     btnWatch.id=BTN_ID
-    btnWatch.style.cssText = 'color:white;margin-top:15px;font-family: Graphik Kinopoisk LC Web,Tahoma,Arial,Verdana,sans-serif;';
+    btnWatch.style.cssText = 'margin-top:15px;font-family: Graphik Kinopoisk LC Web,Tahoma,Arial,Verdana,sans-serif;';
     btnWatch.className=document.querySelector("button[class^='style_button__']").className
     btnWatch.innerHTML=`<img src="${ktLogo}" alt="" width="40" height="40" class="d-inline-block align-text-top"><a>Kinotown</a>`
     btnWatch.style.background="linear-gradient(135deg,#f50 69.91%,#d6bb00)"
     btnWatch.style.padding="0 12px"
-    btnWatch.onclick = () => {openPlayer()};
+    btnWatch.onclick = () => {openPlayer('kp')};
+    elementToFind.appendChild(btnWatch)
+}
+function adBtnimdb(){
+    //var elementToFind=document.querySelector("section[class^='ipc-page-section']")
+    var elementToFind=document.querySelector("section[class^='ipc-page-section']").children[1].children[1].children[0]
+    //var elementToFind=document.querySelectorAll("ul[class^='ipc-inline-list']")[8]
+    var btnWatch = document.createElement('div');
+    btnWatch.id=BTN_ID
+    btnWatch.style.cssText = 'margin-top:4px;';
+    btnWatch.className='ipc-btn ipc-btn--full-width ipc-btn--center-align-content ipc-btn--large-height ipc-btn--core-accent1 ipc-btn--theme-baseAlt sc-e2dae9eb-0 bSzABL'
+    btnWatch.innerHTML=`<img src="${ktLogo}" alt="" width="40" height="40" class="d-inline-block align-text-top"><a>Kinotown</a>`
+    //btnWatch.style.background="linear-gradient(135deg,#f50 69.91%,#d6bb00)"
+    //btnWatch.style.padding="0 12px"
+    btnWatch.onclick = () => {openPlayer('imdb')};
     elementToFind.appendChild(btnWatch)
 }
