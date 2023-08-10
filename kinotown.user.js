@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kinotown
 // @namespace    https://t.me/kinotown_bot
-// @version      0.24
+// @version      0.26
 // @description  Add watch button on kinopoisk.ru and imdb.com
 // @author       kinotown
 // @match        https://www.kinopoisk.ru/*
@@ -36,7 +36,7 @@ const BTN_ID="kinotown-btn"
 const KP_TYPES=["film","series"]
 const KP_WILDCARD="div[class^='styles_header__']"
 const IMDB_WILDCARD="section[class^='ipc-page-section']"
-const KT_LINK="kinotown.bitbucket.io/"
+const KT_LINK="watch.crozet.cc/"
 
 function openPlayer(s) {
     window.open(`https://${KT_LINK}?s=${s}&id=${window.location.href.split('/')[4]}`, '_blank').focus();
@@ -69,11 +69,11 @@ function checkState(){
 	if (!kpId || !kpType || !KP_TYPES.includes(kpType)) {
 		if (ktBtn) ktBtn.remove();
 	} else {
-		if (!ktBtn) addBtn();
+		if (!ktBtn) addBtnKP();
 	}
 }
 
-function addBtn(){
+function addBtnKP(){
     var elementToFind=document.querySelector(KP_WILDCARD)
     var btnWatch = document.createElement('div');
     btnWatch.id=BTN_ID
