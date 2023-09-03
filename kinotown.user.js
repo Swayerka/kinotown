@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kinotown
 // @namespace    https://t.me/kinotown_bot
-// @version      0.26
+// @version      0.27
 // @description  Add watch button on kinopoisk.ru and imdb.com
 // @author       kinotown
 // @match        https://www.kinopoisk.ru/*
@@ -82,6 +82,8 @@ function addBtnKP(){
     btnWatch.innerHTML=`<img src="${ktLogo}" alt="" width="40" height="40" class="d-inline-block align-text-top"><a>Watch</a>`
     btnWatch.style.background="linear-gradient(135deg,#f50 69.91%,#d6bb00)"
     btnWatch.style.padding="0 12px"
+    btnWatch.style.width="250px"
+    btnWatch.style.height="50px"
     btnWatch.onclick = () => {openPlayer('kp')};
     elementToFind.appendChild(btnWatch)
 }
