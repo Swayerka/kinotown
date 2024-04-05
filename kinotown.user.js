@@ -1,16 +1,21 @@
 // ==UserScript==
 // @name         kinotown
 // @namespace    https://t.me/kinotown_bot
-// @version      0.26
+// @version      0.3
 // @description  Add watch button on kinopoisk.ru and imdb.com
 // @author       kinotown
 // @match        https://www.kinopoisk.ru/*
 // @match        https://www.imdb.com/title/*
+// @match        https://beta.crozet.cc/*
+// @match        https://crozet.cc/*
 // @icon         https://kinotown.bitbucket.io/favicon.ico
-// @grant        none
 // @downloadURL  https://github.com/Swayerka/kinotown/raw/main/kinotown.user.js
 // @updateURL    https://github.com/Swayerka/kinotown/raw/main/kinotown.user.js
 // ==/UserScript==
+
+(async function() {
+    document.cookie = `userScript=true;max-age=3600`
+})();
 
 const ktLogo=`data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2aWV3Qm94PSI1LjA
 yOCA0Ljk5NSA5NC45OTUgODkuNzQ0IiB3aWR0aD0iOTguMzM0IiBoZWlnaHQ9IjkzLjAwNSIgeG
@@ -36,10 +41,10 @@ const BTN_ID="kinotown-btn"
 const KP_TYPES=["film","series"]
 const KP_WILDCARD="div[class^='styles_header__']"
 const IMDB_WILDCARD="section[class^='ipc-page-section']"
-const KT_LINK="watch.crozet.cc/"
+const KT_LINK="beta.crozet.cc"
 
 function openPlayer(s) {
-    window.open(`https://${KT_LINK}?s=${s}&id=${window.location.href.split('/')[4]}`, '_blank').focus();
+    window.open(`https://${KT_LINK}/${window.location.href.split('/')[4]}`, '_blank').focus();
 }
 
 window.onload = (event) => {
