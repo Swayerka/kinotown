@@ -1,47 +1,26 @@
 // ==UserScript==
 // @name         kinotown
-// @namespace    https://t.me/kinotown_bot
-// @version      0.3
+// @namespace    crozet.cc
+// @version      0.4
 // @description  Add watch button on kinopoisk.ru and imdb.com
 // @author       kinotown
-// @match        https://www.kinopoisk.ru/*
+// @match        https://www.kinopoisk.ru/film/*
+// @match        https://www.kinopoisk.ru/series/*
 // @match        https://www.imdb.com/title/*
-// @match        https://beta.crozet.cc/*
-// @match        https://crozet.cc/*
-// @icon         https://kinotown.bitbucket.io/favicon.ico
+// @match        https://watch.crozet.cc/*
+// @grant        none
+// @icon         https://watch.crozet.cc/favicon.png
 // @downloadURL  https://github.com/Swayerka/kinotown/raw/main/kinotown.user.js
 // @updateURL    https://github.com/Swayerka/kinotown/raw/main/kinotown.user.js
 // ==/UserScript==
 
-(async function() {
-    document.cookie = `userScript=true;max-age=3600`
-})();
-
-const ktLogo=`data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2aWV3Qm94PSI1LjA
-yOCA0Ljk5NSA5NC45OTUgODkuNzQ0IiB3aWR0aD0iOTguMzM0IiBoZWlnaHQ9IjkzLjAwNSIgeG
-1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNIDMwLjY4IDIyL
-jA0IEMgMzQuMjU5IDE1Ljg0MyAzNy44MzggMTUuODQzIDQxLjQxNiAyMi4wNCBMIDUyLjE1IDQw
-LjYzMiBDIDU1LjcyOSA0Ni44MyA1My45NCA0OS45MjkgNDYuNzgzIDQ5LjkyOSBMIDI1LjMxMyA
-0OS45MjkgQyAxOC4xNTcgNDkuOTI5IDE2LjM2NyA0Ni44MyAxOS45NDYgNDAuNjMyIFoiIHN0eW
-xlPSJmaWxsLXJ1bGU6IG5vbnplcm87IHBhaW50LW9yZGVyOiBzdHJva2U7IHN0cm9rZTogcmdiK
-DI1NSwgMjU1LCAyNTUpOyBmaWxsOiBub25lOyBzdHJva2Utd2lkdGg6IDRweDsiIHRyYW5zZm9y
-bT0ibWF0cml4KDAuODY2MDIxLCAtMC41MDAwMDcsIDAuNTAwMDA3LCAwLjg2NjAyMSwgLTEyLjA
-wMDg3MywgMjIuNTM0MTE4KSIvPgogIDxwYXRoIGQ9Ik0gNjkuMTIyIDM4LjA0MiBDIDY5LjEyMi
-A1NS4xODkgNTUuMjIyIDY5LjA4OSAzOC4wNzUgNjkuMDg5IEMgMjAuOTI4IDY5LjA4OSA3LjAyO
-CA1NS4xODkgNy4wMjggMzguMDQyIEMgNy4wMjggMjAuODk1IDIwLjkyOCA2Ljk5NSAzOC4wNzUg
-Ni45OTUgQyA1NS4yMjIgNi45OTUgNjkuMTIyIDIwLjg5NSA2OS4xMjIgMzguMDQyIFoiIHN0eWx
-lPSJmaWxsOiBub25lOyBmaWxsLXJ1bGU6IG5vbnplcm87IHN0cm9rZTogcmdiKDI1NSwgMjU1LC
-AyNTUwKTsgc3Ryb2tlLXdpZHRoOiA0cHg7Ii8+CiAgPHBhdGggZD0iTSA2Mi42NTggNjUuNjg3I
-EwgODkuNzExIDkyLjczOSBMIDk4LjAyMyA4NC40MjggTCA3MS4zNDQgNTcuNzQ5IiBzdHlsZT0i
-ZmlsbDogbm9uZTsgc3Ryb2tlLWxpbmVjYXA6IHJvdW5kOyBzdHJva2UtbWl0ZXJsaW1pdDogNTA
-7IHN0cm9rZS1saW5lam9pbjogcm91bmQ7IHBhaW50LW9yZGVyOiBmaWxsOyBzdHJva2U6IHJnYi
-gyNTUsIDI1NSwgMjU1KTsgc3Ryb2tlLXdpZHRoOiA0cHg7Ii8+Cjwvc3ZnPg==`
+const KT_LOGO=`data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB3aWR0aD0iMTAwJSIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAyNCAxMDI0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHBhdGggZmlsbD0iIzAwMDAwMCIgb3BhY2l0eT0iMS4wMDAwMDAiIHN0cm9rZT0ibm9uZSIgCglkPSIKTTQwOS42OTg3NjEsNzg2LjQxNjI2MCAKCUMzNTYuMDE5NTMxLDc2NS41NTY0NTggMzExLjc0ODU2Niw3MzIuNzI2MTM1IDI3Ny4zNjEyOTgsNjg2Ljk0NDY0MSAKCUMyNDcuNzE3NTI5LDY0Ny40Nzg1MTYgMjI4LjUwMTY5NCw2MDMuMzc0NDUxIDIyMS42ODU3MTUsNTU0LjQwMjU4OCAKCUMyMTAuMjM3OTAwLDQ3Mi4xNTEzOTggMjMwLjgyMzg1MywzOTguMjE4Mzg0IDI4MS45MDU3MDEsMzMyLjk4MTAxOCAKCUMzMjMuMDQzNzMyLDI4MC40NDMwODUgMzc2LjQ4MjExNywyNDYuMjA1OTMzIDQ0MS4wMDIwMTQsMjI5LjQ3NDczMSAKCUM0NjcuNTM0MzkzLDIyMi41OTQzOTEgNDk0LjY1MTM2NywyMTkuNTUxNTU5IDUyMi4wNzA0MzUsMjIwLjg5MzQwMiAKCUM1ODUuNzczMDcxLDIyNC4wMTA5NDEgNjQyLjQyNDUwMCwyNDUuNjQ5MTI0IDY5Mi4wNzkxMDIsMjg1Ljg1MDczOSAKCUM3MzcuNTY1MzY5LDMyMi42Nzc1NTEgNzY5Ljg0MTc5NywzNjguNjIzODQwIDc4OC42MjEyMTYsNDIzLjk4OTI1OCAKCUM3OTYuNjY3OTY5LDQ0Ny43MTI2NDYgODAxLjEyODE3NCw0NzIuMTQ2NzkwIDgwMi40NDc4NzYsNDk3LjIzMzM2OCAKCUM4MDUuNzc5NDE5LDU2MC41NjY1ODkgNzg5LjQzOTUxNCw2MTguNzU2NTMxIDc1NC45NzU4MzAsNjcxLjQxMjk2NCAKCUM3MTguOTU3ODg2LDcyNi40NDQyNzUgNjY5LjQ1MzA2NCw3NjUuMzY2NjM4IDYwNy4zNjU1NDAsNzg3Ljg1NDczNiAKCUM1NzUuMjg4MjY5LDc5OS40NzMwODMgNTQyLjEzOTAzOCw4MDUuMTkyMzIyIDUwOC4wODY1NzgsODA1LjE5Njk2MCAKCUM0NzQuMjgzNDQ3LDgwNS4yMDE1MzggNDQxLjY2NjUwNCw3OTguNDAzMzIwIDQwOS42OTg3NjEsNzg2LjQxNjI2MCAKTTU5Mi44MjY0NzcsMzAzLjU0MDc3MSAKCUM2MDIuNjE2NDU1LDMwNC4zNjU0NDggNjEyLjA3NzI3MSwzMDcuMzk4NjUxIDYyMS45OTc4NjQsMzA4LjYzODAwMCAKCUM2MjEuODQ2ODYzLDMwNi4yMTEwOTAgNjIwLjQyODk1NSwzMDUuODYwOTkyIDYxOS4zMTE1MjMsMzA1LjI0MTI3MiAKCUM1ODcuMDg4MDEzLDI4Ny4zNzA3NTggNTUyLjM0OTkxNSwyNzguNzU1MjQ5IDUxNS43MTI1MjQsMjc3LjQwODY2MSAKCUM0OTkuMzY0MjI3LDI3Ni44MDc3NzAgNDgzLjEzMjcyMSwyNzguMzM2NjcwIDQ2Ny4wNTIyNDYsMjgxLjM2NzcwNiAKCUM0MTQuNjE4Mjg2LDI5MS4yNTEwNjggMzcwLjA2ODkwOSwzMTUuNzc0ODQxIDMzNS4yODc5MzMsMzU2LjA2Mjg5NyAKCUMyODUuMTAzMzAyLDQxNC4xOTM0ODEgMjY2LjkxNTg5NCw0ODIuMDkzODcyIDI4MC41Nzg1MjIsNTU3LjUxNDg5MyAKCUMyOTEuNjE1MjM0LDYxOC40NDAxMjUgMzI0LjMzNzI4MCw2NjYuNjk0NTgwIDM3My41ODc2MTYsNzAzLjYwMzc2MCAKCUM0MDYuNTEwNDk4LDcyOC4yNzY4NTUgNDQzLjc0MTc2MCw3NDIuNTMwNTc5IDQ4NC44MjkxMzIsNzQ2LjkzNTkxMyAKCUM1MDguMzgzMzAxLDc0OS40NjEzNjUgNTMxLjczNDQzNiw3NDguNzI1NjQ3IDU1NC44NDM4NzIsNzQ0LjIwMjE0OCAKCUM2MDQuNzY4Nzk5LDczNC40Mjk2ODggNjQ3LjIyNjYyNCw3MTAuOTExODY1IDY4MS43NTE5NTMsNjczLjM3NjQ2NSAKCUM3MTguMzMwODExLDYzMy42MDg1MjEgNzM5Ljg2MDI5MSw1ODcuNDMwMDU0IDc0Mi4wMDQ2MzksNTMyLjg0MTEyNSAKCUM3NDIuOTQzNTQyLDUwOC45Mzk0NTMgNzM3Ljk4OTA3NSw0ODYuNTM3MTcwIDcyNi41NzA4MDEsNDY1LjU1MDQxNSAKCUM3MjUuNzcwMTQyLDQ2NC4wNzg5NDkgNzI1LjI3MTQyMyw0NjIuMDY4OTcwIDcyMi45NzE3NDEsNDYyLjIzMzA2MyAKCUM3MjIuMDEyMzkwLDQ2My42NTQ1NzIgNzIyLjI1MTI4Miw0NjUuMDIwMTQyIDcyMi41MzE1NTUsNDY2LjI5MDI4MyAKCUM3MjQuNzE5Nzg4LDQ3Ni4yMDY3NTcgNzI1LjY2NDg1Niw0ODYuMjUzMTEzIDcyNi41NDczMDIsNDk2LjM2NzU1NCAKCUM3MjguNzY2ODQ2LDUyMS44MDc1NTYgNzI1Ljg2NzY3Niw1NDYuNzAwODY3IDcxNy45NTQ0MDcsNTcwLjc1NDgyMiAKCUM2OTkuNDUyNjM3LDYyNi45OTQ3NTEgNjYzLjQ5Mzg5Niw2NjguNjgwMjk4IDYxMC40MTYyNjAsNjk0Ljk3MzY5NCAKCUM1NzMuNzY0NTg3LDcxMy4xMzAwMDUgNTM0Ljc5MjA1Myw3MTguOTI2MDg2IDQ5NC4yOTY3ODMsNzEzLjExNjYzOCAKCUM0NjYuMjM0NjE5LDcwOS4wOTA4ODEgNDQwLjM0NjYxOSw2OTguOTc4NDU1IDQxNi4yOTgyMTgsNjgzLjk0MTA0MCAKCUMzNzguNjk4MDkwLDY2MC40Mjk4NzEgMzUxLjg5Nzg4OCw2MjcuODUxNDQwIDMzNS41OTQ3ODgsNTg2Ljg2MDY1NyAKCUMzMjIuMzQ1NjQyLDU1My41NDgzNDAgMzE5LjI3MDY2MCw1MTguOTUwMTM0IDMyNC41MDMxNDMsNDgzLjQxNTQ5NyAKCUMzMzAuMTIwNTQ0LDQ0NS4yNjY4MTUgMzQ1Ljg0NTMzNyw0MTEuODI3MDU3IDM3MC4yOTc1NzcsMzgyLjQxMTYyMSAKCUMzOTYuMzEwMzMzLDM1MS4xMTg5ODggNDI5LjM5Mjc5MiwzMjkuOTYxMjczIDQ2Ny41NzM0NTYsMzE2LjUxMjkzOSAKCUM0OTIuMTkzNjA0LDMwNy44NDEwNjQgNTE3LjUxMzU1MCwzMDIuODczOTMyIDU0My42MzkzNDMsMzAxLjUwMjE2NyAKCUM1NTkuODUwODMwLDMwMC42NTA5NzAgNTc1Ljg5ODEzMiwzMDEuMzYyMDMwIDU5Mi44MjY0NzcsMzAzLjU0MDc3MSAKTTU5OC44NjkyMDIsNDY1LjY2Mzc4OCAKCUM1ODEuODY3Njc2LDQ1NS40NzcxNDIgNTY0LjgzNjU0OCw0NDUuMzM5NDE3IDU0Ny44NzExNTUsNDM1LjA5Mjg2NSAKCUM1MTkuMjEwOTk5LDQxNy43ODMwMjAgNDkwLjYxOTA0OSw0MDAuMzYwMDc3IDQ2MS45MzA0NTAsMzgzLjA5NzY1NiAKCUM0NTcuMDk4MTQ1LDM4MC4xODk5NzIgNDUyLjA0MDk1NSwzNzcuNTE5OTU4IDQ0Ni4xNDYwNTcsMzc3LjM2NjExOSAKCUM0MjUuOTQwMjc3LDM3Ni44Mzg4MzcgNDEyLjI4OTQ5MCwzODkuOTA0MTc1IDQxMi4yMDM2NDQsNDEwLjE1OTAyNyAKCUM0MTIuMDgwNzUwLDQzOS4xNTU3OTIgNDEyLjE0OTk2Myw0NjguMTUzMzgxIDQxMi4xMzg0MjgsNDk3LjE1MDYwNCAKCUM0MTIuMTIyODAzLDUzNi4zMTM1OTkgNDEyLjAzNTUyMiw1NzUuNDc2ODA3IDQxMi4xMjkzMzMsNjE0LjYzOTU4NyAKCUM0MTIuMTY2Nzc5LDYzMC4yNzQ3MTkgNDIwLjY3NTc1MSw2NDEuODUxMzc5IDQzNS4xMjQ2OTUsNjQ1Ljg5ODQ5OSAKCUM0NDQuMDA4MDg3LDY0OC4zODY3MTkgNDUyLjUzNjQwNyw2NDcuMDA2Nzc1IDQ2MC41ODM2NDksNjQyLjI2MjAyNCAKCUM0OTkuNDY3NDk5LDYxOS4zMzUzODggNTM4LjM5ODkyNiw1OTYuNDg5MzgwIDU3Ny4zMTM5MDQsNTczLjYxNTQ3OSAKCUM1OTYuMTI1NzkzLDU2Mi41NTgwNDQgNjE1LjE5Nzk5OCw1NTEuOTE2MTM4IDYzMy42ODM2NTUsNTQwLjMzNzgzMCAKCUM2NTUuMzk4MDEwLDUyNi43MzczMDUgNjU0LjQ3NzE3Myw0OTguOTQ0NjcyIDYzMi40MjgxNjIsNDg1LjkzNjc2OCAKCUM2MjEuMzgxMDQyLDQ3OS40MTk0MzQgNjEwLjQ1Mjc1OSw0NzIuNzAwNDA5IDU5OC44NjkyMDIsNDY1LjY2Mzc4OCAKeiIvPgo8cGF0aCBmaWxsPSIjMDAwMDAwIiBvcGFjaXR5PSIxLjAwMDAwMCIgc3Ryb2tlPSJub25lIiAKCWQ9IgpNNDU1Ljc2NjA1Miw0NzguMDAwMDAwIAoJQzQ1Ni4xNzI4NTIsNDY5LjM3MDYwNSA0NTQuNzUxMTI5LDQ2MS4xNTk1NzYgNDU2LjU2NTU4Miw0NTMuMTA0NDAxIAoJQzQ1OC45NzQ4ODQsNDQyLjQwODI5NSA0NjguNDExNzEzLDQzNy41OTEwMDMgNDc4LjM1Njc1MCw0NDIuMzI1NDM5IAoJQzQ4NC4zNDYzMTMsNDQ1LjE3Njg4MCA0ODkuOTM3OTU4LDQ0OC44ODc1MTIgNDk1LjYyMTM5OSw0NTIuMzU0Njc1IAoJQzUyMi45MjE0NDgsNDY5LjAwODg1MCA1NTAuMTkxODk1LDQ4NS43MTE1NDggNTc3LjQ3MjY1Niw1MDIuMzk3MzY5IAoJQzU3OC4wNDA4OTQsNTAyLjc0NDkwNCA1NzguNjI0MDIzLDUwMy4wNzE0NDIgNTc5LjE3MDc3Niw1MDMuNDUwMjg3IAoJQzU4OC40MDY5ODIsNTA5Ljg1MDU1NSA1ODguNTM1OTUwLDUxNy4xNjc3ODYgNTc4Ljk4MjIzOSw1MjMuMDU3ODAwIAoJQzU2My41MzMzMjUsNTMyLjU4MjIxNCA1NDcuODIxODk5LDU0MS42ODEzMzUgNTMyLjIxMDQ0OSw1NTAuOTQxNjUwIAoJQzUxNS4zMDkzMjYsNTYwLjk2NzA0MSA0OTguNDExMzc3LDU3MC45OTc5ODYgNDgxLjQ3Mjc3OCw1ODAuOTU5ODM5IAoJQzQ3OC40NzEyNTIsNTgyLjcyNTA5OCA0NzUuMzg0NzM1LDU4NC4zMjYwNTAgNDcxLjcyMDAzMiw1ODQuNTE3OTQ0IAoJQzQ2NC40MDA5NDAsNTg0LjkwMTQyOCA0NTguMzgxODM2LDU4MC41MTY0MTggNDU2LjYzNjk5Myw1NzMuNDAxMzA2IAoJQzQ1NS43NTI3NzcsNTY5Ljc5NTcxNSA0NTUuNzQ3ODMzLDU2Ni4xNDI4ODMgNDU1Ljc0OTA1NCw1NjIuNDc2MTM1IAoJQzQ1NS43NTgyMDksNTM0LjQ4NDA3MCA0NTUuNzYxMjkyLDUwNi40OTIwMzUgNDU1Ljc2NjA1Miw0NzguMDAwMDAwIAp6Ii8+Cjwvc3ZnPg==`
 
 const BTN_ID="kinotown-btn"
-const KP_TYPES=["film","series"]
 const KP_WILDCARD="div[class^='styles_header__']"
 const IMDB_WILDCARD="section[class^='ipc-page-section']"
-const KT_LINK="beta.crozet.cc"
+
+const KT_LINK="watch.crozet.cc"
 
 function openPlayer(s) {
     window.open(`https://${KT_LINK}/${window.location.href.split('/')[4]}`, '_blank').focus();
@@ -51,31 +30,13 @@ window.onload = (event) => {
     if(window.location.hostname=='www.imdb.com'){
         addBtnImdb()
     }else if(window.location.hostname=='www.kinopoisk.ru'){
-        const observer = new MutationObserver(() => checkState());
-        observer.observe(document, { subtree: true, childList: true });
-        checkState();
+        addBtnKP()
+    }else if(window.location.hostname=='watch.crozet.cc'){
+        document.cookie = `userScript=true;max-age=3600`
     }else{
-        console.log("o")
+
     }
 
-}
-
-let lastUrl = ""
-function checkState(){
-	let url = window.location.href;
-
-	if (url === lastUrl) return;
-	lastUrl = url;
-
-	let ktBtn = document.getElementById(BTN_ID);
-	let kpId = window.location.href.split('/')[4];
-	let kpType = window.location.href.split('/')[3];
-
-	if (!kpId || !kpType || !KP_TYPES.includes(kpType)) {
-		if (ktBtn) ktBtn.remove();
-	} else {
-		if (!ktBtn) addBtnKP();
-	}
 }
 
 function addBtnKP(){
@@ -84,7 +45,7 @@ function addBtnKP(){
     btnWatch.id=BTN_ID
     btnWatch.style.cssText = 'margin-top:15px;font-family: Graphik Kinopoisk LC Web,Tahoma,Arial,Verdana,sans-serif;';
     btnWatch.className=document.querySelector("button[class^='style_button__']").className
-    btnWatch.innerHTML=`<img src="${ktLogo}" alt="" width="40" height="40" class="d-inline-block align-text-top"><a>Watch</a>`
+    btnWatch.innerHTML=`<img src="${KT_LOGO}" alt="" width="60" height="60" class="d-inline-block align-text-top" style="filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(136deg) brightness(108%) contrast(102%);"><span style="margin-right:10px;font-size: medium;">Watch</span>`
     btnWatch.style.background="linear-gradient(135deg,#f50 69.91%,#d6bb00)"
     btnWatch.style.padding="0 12px"
     btnWatch.onclick = () => {openPlayer('kp')};
@@ -96,7 +57,7 @@ function addBtnImdb(){
     btnWatch.id=BTN_ID
     btnWatch.style.cssText = 'margin-top:4px;';
     btnWatch.className='ipc-btn ipc-btn--full-width ipc-btn--center-align-content ipc-btn--large-height ipc-btn--core-accent1 ipc-btn--theme-baseAlt sc-e2dae9eb-0 bSzABL'
-    btnWatch.innerHTML=`<img src="${ktLogo}" alt="" width="40" height="40" class="d-inline-block align-text-top"><a>Watch</a>`
+    btnWatch.innerHTML=`<img src="${KT_LOGO}" alt="" width="60" height="60" class="d-inline-block align-text-top"><span style="margin-right:10px;font-size: 20px;">Watch</span>`
     btnWatch.onclick = () => {openPlayer('imdb')};
     elementToFind.appendChild(btnWatch)
 }
